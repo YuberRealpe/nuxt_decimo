@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{390:function(n,t,e){"use strict";e.r(t);var o={components:{navbar:e(170).a}},c=e(25),component=Object(c.a)(o,function(){var n=this.$createElement,t=this._self._c||n;return t("div",[t("navbar"),this._v(" "),t("h1",[this._v("Desde Contacto")])],1)},[],!1,null,null,null);t.default=component.exports}}]);

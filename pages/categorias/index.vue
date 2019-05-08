@@ -15,10 +15,31 @@
       <div>
         <b-table responsivestriped hover :fields="fields" :items="categorias" id="list_products" :per-page="perPage" :current-page="currentPage" small>
           <template slot="acciones" slot-scope="row"> <!-- row trae los datos  y en este caso el id -->
-            <b-button size="sm" @click="editar()" class="mr-2" variant="info" type="button">Editar</b-button>
+            <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row)" class="mr-2" size="sm">Editar</b-button>
             <b-button size="sm" @click='eliminar(row.item.id)' class="mr-2" variant="danger" type="button">Eliminar</b-button>
           </template>
         </b-table>
+        <b-modal id="modal-prevent-closing" ref="modal" title="Editar Categoria"  @show="resetModal" @hidden="resetModal" @ok="handleOk">
+          <form ref="form" @submit.stop.prevent="handleSubmit">
+             <b-form-group  :state="nombreState" label="Nombre" label-for="name-input" invalid-feedback="Nombre es requerido">
+                <b-form-input :state="nombreState" id="nombre"  required></b-form-input>
+              </b-form-group>
+              <b-form-group  :state="referenciaState" label="Referencia" label-for="referencia-input" invalid-feedback="Referencia es requerida">
+                <b-form-input :state="referenciaState" id="referencia"   required></b-form-input>
+              </b-form-group>
+              <b-form-group :state="descripcionState" label="Descripcion" label-for="descripcion-input" invalid-feedback="Referenia es requerida">
+                <b-form-input :state="descripcionState" id="descripcion" required></b-form-input>
+              </b-form-group>
+          </form>
+       </b-modal>
+           <b-modal id="hecho" 
+          size='sm'
+          buttonSize='sm'
+          okVariant='success'
+          headerClass='p-2 border-bottom-0'
+          footerClass= 'p-2 border-top-0'
+        
+       >{{ String(msg) }}</b-modal>
       </div>
       <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="list_products"></b-pagination>
     </div>
@@ -27,6 +48,8 @@
 
 <script>
 import { db } from "../../services/firebase";
+var lec=null;
+
 export default {
   asyncData() {
     return db
@@ -51,6 +74,10 @@ export default {
   },
   data() {
     return {
+      msg:null,
+      nombreState: null,
+      referenciaState:null,
+      descripcionState:null,
       fields: ["nombre", "referencia", "descripcion", "acciones"]
     };
   },
@@ -66,13 +93,56 @@ export default {
       db.collection("categorias").doc(id).delete().then(()=>{
         this.categorias.splice(index,1);
       });
-      alert("Eliminado");
+     
+            this.msg = 'La categoria ha eliminada!';
+            this.$root.$emit("bv::show::modal", "hecho");
 
-    },
+    },checkFormValidity() {
+        const valid = this.$refs.form.checkValidity()
+        this.nombreState = valid ? 'valid' : 'invalid'
+        this.referenciaState = valid ? 'valid' : 'invalid'
+        this.descripcionState = valid ? 'valid' : 'invalid'
+        return valid
+      },
+      resetModal() {
+        this.nombreState = null
+      },
+      handleOk(bvModalEvt) {
+        // Prevent modal from closing
+        bvModalEvt.preventDefault()
+        // Trigger submit handler
+        this.handleSubmit()
+      },
+      handleSubmit() {
+        // Exit when the form isn't valid
+        if (!this.checkFormValidity()) {
+          return
+        }
+      //this.$root.$emit("bv::show::modal", "hecho");
+          let verificador=null;
 
-    editar() {
-      console.log("logrado")
-    }
+          db.collection("categorias").doc(lec).update({
+              nombre:nombre.value,
+              referencia: referencia.value,
+              descripcion: descripcion.value
+            }).catch(function(error){
+              alert("Error de conexion "+ error);
+            });
+            
+            this.msg = 'La categoria ha sido actualizada!';
+            this.$root.$emit("bv::show::modal", "hecho");
+
+        this.$nextTick(() => {
+          this.$refs.modal.hide()
+        })
+      },
+      asignar(row){
+        lec = row.item.id;
+        nombre.value = row.item.nombre;
+        referencia.value = row.item.referencia;
+        descripcion.value = row.item.descripcion;
+
+      }
   }
 };
 

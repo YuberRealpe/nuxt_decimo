@@ -21,6 +21,15 @@
       <b-button type="submit" variant="primary" >Guardar</b-button>
       <b-button type="reset" variant="danger">Limpiar</b-button>
     </b-form>
+    
+       <b-modal id="hecho" 
+          size='sm'
+          buttonSize='sm'
+          okVariant='success'
+          headerClass='p-2 border-bottom-0'
+          footerClass= 'p-2 border-top-0'
+        
+       >{{ String(msg) }}</b-modal>
   </div>
 </template>
 
@@ -31,6 +40,7 @@ export default {
 
   data(){
     return {
+      msg: null,
       form:{
         nombre: '',
         cantidad:'',
@@ -45,6 +55,10 @@ export default {
           path: "/productos"
         })
       })
+      
+      this.msg = 'El producto se guardo correctamente!';
+            this.$root.$emit("bv::show::modal", "hecho");
+          
     }
   }
 };

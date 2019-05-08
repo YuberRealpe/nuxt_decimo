@@ -40,7 +40,7 @@
           headerClass='p-2 border-bottom-0'
           footerClass= 'p-2 border-top-0'
         
-       >El producto ha sido actualizado!</b-modal>
+       >{{ String(msg) }}</b-modal>
       </div>
       <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="list_products"></b-pagination>
     </div>
@@ -48,14 +48,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
+
 import { db } from "../../services/firebase";
-import BModal from 'bootstrap-vue/es/components/modal/modal'
-Vue.component('b-modal', BModal)
-import vBModal from 'bootstrap-vue/es/directives/modal/modal'
-Vue.directive('b-modal', vBModal)
-import Modal from 'bootstrap-vue/es/components/modal'
-Vue.use(Modal)
 
 var lec=null;
 
@@ -84,9 +78,7 @@ export default {
   },
   data() {
     return {
-      dismissSecs: 10,
-      dismissCountDown: 0,
-      showDismissibleAlert: false,
+      msg:null,
       nombreState: null,
       precioState:null,
       cantidadState:null,
@@ -105,11 +97,9 @@ export default {
       db.collection("productos").doc(id).delete().then(()=>{
         this.productos.splice(index,1);
       });
-      alert("Eliminado");
+          this.msg = 'El producto ha eliminado!';
+            this.$root.$emit("bv::show::modal", "hecho");("Eliminado");
 
-    },
-    editar() {
-      console.log("logrado")
     },
     checkFormValidity() {
         const valid = this.$refs.form.checkValidity()
@@ -142,6 +132,7 @@ export default {
             }).catch(function(error){
               alert("Error de conexion "+ error);
             });
+        this.msg = 'El producto ha sido actualizado!';
         this.$root.$emit("bv::show::modal", "hecho");
 
         this.$nextTick(() => {
