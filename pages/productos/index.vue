@@ -15,10 +15,32 @@
       <div>
         <b-table responsivestriped hover :fields="fields" :items="productos" id="list_products" :per-page="perPage" :current-page="currentPage" small>
           <template slot="acciones" slot-scope="row"> <!-- row trae los datos  y en este caso el id -->
-            <b-button size="sm" @click="editar()" class="mr-2" variant="info" type="button">Editar</b-button>
+            <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row)" class="mr-2" size="sm">Editar</b-button>
             <b-button size="sm" @click='eliminar(row.item.id)' class="mr-2" variant="danger" type="button">Eliminar</b-button>
           </template>
         </b-table>
+        <b-modal id="modal-prevent-closing" ref="modal" title="Editar Producto"  @show="resetModal" @hidden="resetModal" @ok="handleOk">
+          <form ref="form" @submit.stop.prevent="handleSubmit">
+             <b-form-group  :state="nombreState" label="Nombre" label-for="name-input" invalid-feedback="Nombre es requerido">
+                <b-form-input :state="nombreState" id="nombre"  required></b-form-input>
+              </b-form-group>
+              <b-form-group  :state="precioState" label="Precio" label-for="precio-input" invalid-feedback="Precio es requerido">
+                <b-form-input :state="precioState" id="precio"   required></b-form-input>
+              </b-form-group>
+              <b-form-group :state="cantidadState" label="Cantidad" label-for="cantidad-input" invalid-feedback="Cantidad es requerida">
+                <b-form-input :state="cantidadState" id="cantidad" required></b-form-input>
+              </b-form-group>
+          </form>
+       </b-modal>
+
+       <b-modal id="hecho" 
+          size='sm'
+          buttonSize='sm'
+          okVariant='success'
+          headerClass='p-2 border-bottom-0'
+          footerClass= 'p-2 border-top-0'
+        
+       >El producto ha sido actualizado!</b-modal>
       </div>
       <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="list_products"></b-pagination>
     </div>
@@ -26,8 +48,19 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { db } from "../../services/firebase";
+import BModal from 'bootstrap-vue/es/components/modal/modal'
+Vue.component('b-modal', BModal)
+import vBModal from 'bootstrap-vue/es/directives/modal/modal'
+Vue.directive('b-modal', vBModal)
+import Modal from 'bootstrap-vue/es/components/modal'
+Vue.use(Modal)
+
+var lec=null;
+
 export default {
+
   asyncData() {
     return db
       .collection("productos")
@@ -51,7 +84,13 @@ export default {
   },
   data() {
     return {
-      fields: ["Imagen", "nombre", "precio", "cantidad", "acciones"]
+      dismissSecs: 10,
+      dismissCountDown: 0,
+      showDismissibleAlert: false,
+      nombreState: null,
+      precioState:null,
+      cantidadState:null,
+      fields: ["Imagen", "nombre", "precio", "cantidad", "acciones"],
     };
   },
   methods: {
@@ -69,10 +108,54 @@ export default {
       alert("Eliminado");
 
     },
-
     editar() {
       console.log("logrado")
-    }
+    },
+    checkFormValidity() {
+        const valid = this.$refs.form.checkValidity()
+        this.nombreState = valid ? 'valid' : 'invalid'
+        this.precioState = valid ? 'valid' : 'invalid'
+        this.cantidadState = valid ? 'valid' : 'invalid'
+        return valid
+      },
+      resetModal() {
+        this.nombreState = null
+      },
+      handleOk(bvModalEvt) {
+        // Prevent modal from closing
+        bvModalEvt.preventDefault()
+        // Trigger submit handler
+        this.handleSubmit()
+      },
+      handleSubmit() {
+        // Exit when the form isn't valid
+        if (!this.checkFormValidity()) {
+          return
+        }
+      //this.$root.$emit("bv::show::modal", "hecho");
+          let verificador=null;
+
+          db.collection("productos").doc(lec).update({
+              nombre:nombre.value,
+              precio: precio.value,
+              cantidad: cantidad.value
+            }).catch(function(error){
+              alert("Error de conexion "+ error);
+            });
+        this.$root.$emit("bv::show::modal", "hecho");
+
+        this.$nextTick(() => {
+          this.$refs.modal.hide()
+        })
+      },
+      asignar(row){
+        lec = row.item.id;
+        nombre.value = row.item.nombre;
+        precio.value = row.item.precio;
+        cantidad.value = row.item.cantidad;
+
+      }
+ 
   }
 };
 

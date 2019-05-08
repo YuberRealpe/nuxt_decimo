@@ -1,39 +1,55 @@
 <template>
-  <div>
+<div >
+ <b-carousel
+      id="carousel-1"
+      v-model="slide"
+      :interval="4000"
+      controls
+      indicators
+      background="#ababab"
+      img-width="1024"
+      img-height="480"
+      style="text-shadow: 1px 1px 2px #333;"
+      @sliding-start="onSlideStart"
+      @sliding-end="onSlideEnd"
+    >
+      <b-carousel-slide
+        caption="First slide"
+        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
+        img-src="../static/promo3.png"
+      ></b-carousel-slide>
 
-    <h1>Hola {{ msg }}</h1>
-    <input type="text" v-model="msg">
-    <button @click="guardar" class="btn btn-primary">Guardar</button>
-    <b-button variant="primary">Guardar</b-button>
-    <table>
-        <tr>
-            <th>Nombre</th>
-        </tr>
-        <tr v-for="(item,index) in municipios" :key="index">
-            <td>{{item}}</td>
-        </tr>
-    </table>
-  </div>
+      <b-carousel-slide img-src="../static/promo4.png">
+  
+      </b-carousel-slide>
+
+      <b-carousel-slide img-src="../static/promo.png"></b-carousel-slide>
+
+      <b-carousel-slide img-src="../static/promo2.png"></b-carousel-slide>
+
+      
+    </b-carousel>
+</div>
+
 </template>
-
 <script>
-import navbar from '../components/navbar'
 
 export default {
-  components:{navbar},
-  data() {
-    return {
-      msg: "Yuber Realpe",
-      municipios: ["mocoa", "villagarzon", "puerto asis"]
-    };
+  data() { 
+      return {
+        slide: 0,
+        sliding: null
+      }
+    
   },
-  methods:{
-      guardar(){
-          this.municipios.push(this.msg)
+ methods:{
+   
+    onSlideStart(slide) {
+        this.sliding = true
+      },
+      onSlideEnd(slide) {
+        this.sliding = false
       }
   }
-};
+}
 </script>
-
-<style>
-</style>
