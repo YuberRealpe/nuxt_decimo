@@ -1,0 +1,2 @@
+exports.ids=[3],exports.modules={35:function(t,e,n){"use strict";n.r(e);var r={components:{navbar:n(7).a}},o=n(1),component=Object(o.a)(r,function(){var t=this.$createElement,e=this._self._c||t;return e("div",[e("navbar"),this._ssrNode(" <h1>Desde Contacto</h1>")],2)},[],!1,null,null,"886879da");e.default=component.exports}};
+//# sourceMappingURL=7d0b428230d8a1f67369.js.map
