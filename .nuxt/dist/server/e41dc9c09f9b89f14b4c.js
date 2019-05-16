@@ -1,2 +1,0 @@
-exports.ids=[3],exports.modules={31:function(t,e,r){"use strict";r.r(e);var n={},o=r(1),component=Object(o.a)(n,function(){var t=this.$createElement;return(this._self._c||t)("div",[this._ssrNode("<h1>Desde Contacto</h1>")])},[],!1,null,null,"886879da");e.default=component.exports}};
-//# sourceMappingURL=e41dc9c09f9b89f14b4c.js.map

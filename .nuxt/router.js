@@ -5,8 +5,10 @@ import { interopDefault } from './utils'
 const _2235ab59 = () => interopDefault(import('..\\pages\\categorias\\index.vue' /* webpackChunkName: "pages_categorias_index" */))
 const _51fe6f10 = () => interopDefault(import('..\\pages\\contacto.vue' /* webpackChunkName: "pages_contacto" */))
 const _86b433f0 = () => interopDefault(import('..\\pages\\productos\\index.vue' /* webpackChunkName: "pages_productos_index" */))
+const _3de48f4d = () => interopDefault(import('..\\pages\\usuario\\index.vue' /* webpackChunkName: "pages_usuario_index" */))
 const _75de108e = () => interopDefault(import('..\\pages\\categorias\\crear.vue' /* webpackChunkName: "pages_categorias_crear" */))
 const _104e4b3d = () => interopDefault(import('..\\pages\\productos\\crear.vue' /* webpackChunkName: "pages_productos_crear" */))
+const _dce616fc = () => interopDefault(import('..\\pages\\usuario\\crear.vue' /* webpackChunkName: "pages_usuario_crear" */))
 const _4fa1a20e = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 Vue.use(Router)
@@ -96,6 +98,10 @@ export function createRouter() {
       component: _86b433f0,
       name: "productos"
     }, {
+      path: "/usuario",
+      component: _3de48f4d,
+      name: "usuario"
+    }, {
       path: "/categorias/crear",
       component: _75de108e,
       name: "categorias-crear"
@@ -103,6 +109,10 @@ export function createRouter() {
       path: "/productos/crear",
       component: _104e4b3d,
       name: "productos-crear"
+    }, {
+      path: "/usuario/crear",
+      component: _dce616fc,
+      name: "usuario-crear"
     }, {
       path: "/",
       component: _4fa1a20e,

@@ -1,1 +1,0 @@
-{"version":3,"file":"e41dc9c09f9b89f14b4c.js","sources":["webpack:///./pages/contacto.vue"],"sourcesContent":["var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._ssrNode(\"<h1>Desde Contacto</h1>\")])}\nvar staticRenderFns = []\n\nexport { render, staticRenderFns }"],"mappings":"AAAA","sourceRoot":""}

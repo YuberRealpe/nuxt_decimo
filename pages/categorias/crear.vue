@@ -3,7 +3,7 @@
     
 
     <b-form id="categorias" @submit.prevent="guardarCategoria" >
-      <h1 class="text-center">Agregar producto nuevo</h1>
+      <h1 class="text-center">Agregar Categoria nueva</h1>
       <b-form-group id="items">
         <label for="nombre">Nombre</label>
         <b-form-input v-model="form.nombre" id="nombre" type="text" required placeholder="Ingrese nombre de categoria"></b-form-input>

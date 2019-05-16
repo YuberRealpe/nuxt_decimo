@@ -8,7 +8,9 @@
         <b-navbar-nav class="ml-auto"> 
           <b-nav-item href="/categorias">Categorias</b-nav-item>
           <b-nav-item href="/productos">Productos</b-nav-item>
-          <b-nav-item href="/contacto">Contacto</b-nav-item>
+          <b-nav-item href="/usuario/crear">Crear cuenta</b-nav-item>
+          <b-nav-item href="/usuario">Ingresar</b-nav-item>
+          
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

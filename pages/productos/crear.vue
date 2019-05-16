@@ -5,9 +5,11 @@
     <b-form id="product" @submit.prevent="guardarProducto" >
       <h1 class="text-center">Agregar producto nuevo</h1>
       <b-form-group id="items">
-        <label for="imagen">Imagen</label>
-        <b-form-file  accept=".jpg, .png, .jpeg" placeholder="Inserte imagen" name="imagen" id="imagen"></b-form-file>
-
+        <b-form-file
+        placeholder=" cargar imagen"
+        accept="image/"
+        v-model="imageProduct"/>
+        
         <label for="nombre">Nombre</label>
         <b-form-input v-model="form.nombre" id="nombre" type="text" required placeholder="Ingrese nombre"></b-form-input>
 
@@ -16,6 +18,10 @@
 
         <label for="cantidad">Cantidad</label>
         <b-form-input v-model="form.cantidad" id="cantidad" type="number" required placeholder="Ingrese cantidad existente"></b-form-input>
+        
+        <label label-for="categorias" label="categoria">Cantidad</label>
+        <b-form-select id="categorias" v-model="form.categoria" :options="categorias"></b-form-select>
+     
       </b-form-group>
 
       <b-button type="submit" variant="primary" >Guardar</b-button>
@@ -34,13 +40,28 @@
 </template>
 
 <script>
-import {db} from '../../services/firebase'
+import {db,storage} from '../../services/firebase'
 
 export default {
+  asyncData(){
+    return db.collection('categorias').get().then(categoriasSnap =>{
+      let categorias = [];
 
+      categoriasSnap.forEach(value => {
+          categorias.push(value.data().nombre)
+      });
+
+      return{
+        categorias
+      }
+      
+    })
+  },
   data(){
     return {
       msg: null,
+      guardando:false,
+      imageProduct:'',
       form:{
         nombre: '',
         cantidad:'',
@@ -50,15 +71,23 @@ export default {
   },
   methods: {
     guardarProducto(){
-      db.collection("productos").add(this.form).then(res=>{
-        this.$router,push({
-          path: "/productos"
+      this.guardando = true
+      let imageRef = storage.child(this.imageProduct.name)
+
+      imageRef.put(this.imageProduct).then(async imageRes =>{
+        
+        this.form.imagen = await imageRes.ref.getDownloadURL()
+        db.collection("productos").add(this.form).then(res=>{
+          this.$router,push({
+            path: "/productos"
+          })
         })
+        
+        this.msg = 'El producto se guardo correctamente!';
+              this.$root.$emit("bv::show::modal", "hecho");
+            
+
       })
-      
-      this.msg = 'El producto se guardo correctamente!';
-            this.$root.$emit("bv::show::modal", "hecho");
-          
     }
   }
 };

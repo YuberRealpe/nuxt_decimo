@@ -1,4 +1,6 @@
 import firebase, {firestore} from 'firebase'
+import 'firebase/storage'
+
 var config = {
     apiKey: "AIzaSyCeGgJP6bHWm7SMKkq0vcB0dZILvFJCg4M",
     authDomain: "mytenda-f8a93.firebaseapp.com",
@@ -12,8 +14,9 @@ var config = {
   }
 
   const db = firebase.firestore()
+  const storage = firebase.storage().ref()
 
   export default firebase 
   export{
-      db
+      db,storage
   }
