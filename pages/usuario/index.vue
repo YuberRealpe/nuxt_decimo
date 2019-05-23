@@ -8,7 +8,7 @@
 					</span>
 				</div>
 
-        <b-form class="login100-form validate-form" @submit="onSubmit" @reset="onReset">
+        <b-form class="login100-form validate-form" @submit.prevent="onSubmit" @reset="onReset">
           <b-form-group
           class="wrap-input100 validate-input m-b-26 alert-validate"
             id="input-group-1"
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import {auth} from '../../services/firebase'
   export default {
     data() {
       return {
@@ -71,12 +72,16 @@
       }
     },
     methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
+      onSubmit() { //Iniciar Sesion
+        auth.signInWithEmailAndPassword(
+          this.form.email,this.form.password).then(res=>{
+            this.$router.push({path:'/'})
+          }).catch(err=>{
+            alert("ha ocurrido un error"+err.message)
+          })
       },
       onReset(evt) {
-        evt.preventDefault()
+        
         // Reset our form values
         this.form.email = ''
         this.form.nombre = ''
