@@ -1,112 +1,122 @@
 <template>
- <div class="container">
-     <h1>Registrarse</h1>
-    <b-form  @submit="onSubmit" @reset="onReset">
-      <b-form-group
-        id="input-group-1"
-        label="Correo electronico:"
-        label-for="input-1"
-        description="Nunca compartiremos tu correo electrónico con alguien más.."
-      >
-        <b-form-input
-          id="input-1"
-          v-model="form.email"
-          type="email"
-          required
-          placeholder="Enter email"
-        ></b-form-input>
-      </b-form-group>
 
-      <b-form-group id="input-group-2" label="Nombre:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="form.nombre"
-          required
-          placeholder="Ingresa nombre de usuario"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-3" label="Fecha Nacimiento:" label-for="input-3">
-        <b-form-input
-          id="input-3"
-          type='date'
-          v-model="form.fecha"
-          required
-          placeholder="Ingresa fecha de nacimiento"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-4" label="Contraseña:" label-for="input-4">
-        <b-form-input
-          id="input-4"
-          type='password'
-          v-model="form.password"
-          required
-          placeholder="Ingresa una contraseña mayor a 8 caracteres"
-        ></b-form-input>
-      </b-form-group>
+<div class="limiter mt-1">
+  <b-alert :show="showDismissibleAlert" 
+     @dismissed="showDismissibleAlert=false"
+     variant="success" dismissible>
+      Usuario registrado con exito!
+    </b-alert>
+  <div class="container-login100">
+      <div class="wrap-login100">
+        <h1>Registrarse</h1>
+        <b-form @submit.prevent="registro" @reset="onReset" class="login100-form validate-form" >
+          <b-form-group
+            id="input-group-1"
+            
+            label-for="input-1"
+            class="wrap-input100 validate-input m-b-26 alert-validate"
+          >
+          <span class="label-input100">Correo electronico:</span>
+            <b-form-input
+            class="input100"
+              id="email"
+              v-model="form.email"
+              type="email"
+              required
+              placeholder="Ingresar email"
+            ></b-form-input>
+            <span class="focus-input100"></span>
+          </b-form-group>
 
-      <b-button type="submit" variant="success">Registrarse</b-button>
-    </b-form>
+          <b-form-group id="input-group-2" label="Nombre:" label-for="input-2" 
+          class="wrap-input100 validate-input m-b-26 alert-validate">
+            <b-form-input
+             class="input100"
+              id="nombre"
+              v-model="form.nombre"
+              required
+              placeholder="Ingresa nombre de usuario"
+            ></b-form-input>
+            <span class="focus-input100"></span>
+          </b-form-group>
+          <b-form-group id="input-group-3" label="Fecha Nacimiento:" label-for="input-3"
+          class="wrap-input100 validate-input m-b-26 alert-validate">
+            <b-form-input
+             class="input100"
+              id="fecha"
+              type="date"
+              v-model="form.fecha"
+              required
+              placeholder="Ingresa fecha de nacimiento"
+            ></b-form-input>
+            <span class="focus-input100"></span>
+          </b-form-group>
+          <b-form-group id="input-group-4" label="Contraseña:" label-for="input-4"
+          class="wrap-input100 validate-input m-b-26 alert-validate">
+            <b-form-input
+             class="input100"
+              id="password"
+              type="password"
+              v-model="form.password"
+              required
+              placeholder="Ingresa una contraseña mayor a 8 caracteres"
+            ></b-form-input>
+            <span class="focus-input100"></span>
+          </b-form-group>
 
+          <b-button type="submit" variant="success">Registrarse</b-button>
+        </b-form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        form: {
-          email: '',
-          nombre: '',
-          password: '',
-          fecha: '',
-        },
+import { auth } from "../../services/firebase";
+export default {
+  data() {
+    return {
+      form: {},
+        showDismissibleAlert: false
+    };
+  },
+  methods: {
+    registro() {
+      auth
+        .createUserWithEmailAndPassword(this.form.email, this.form.password)
+        .then(res => {
+          res.user.updateProfile({
+            displayName: this.form.nombre,
+            //photoURL
+          }).then(resUpdate=>{
+            this.$router.push({
+              path: "/"
+            });
+            this.showAlert();
+          })
+          
+        }).catch(err => {
+          alert("Ha ocurrido un error" + err.message);
+        });
         
-      }
     },
-    methods: {
-      onSubmit(evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
-      onReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.nombre = ''
-        this.form.date = ''
-        this.form.password = ''
+      showAlert() {
+        this.showDismissibleAlert=true
         
       }
+    ,
+    onReset(evt) {
+      evt.preventDefault();
+      // Reset our form values
+      this.form.email = "";
+      this.form.nombre = "";
+      this.form.date = "";
+      this.form.password = "";
     }
   }
+};
 </script>
 <style>
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, 
-pre, form, fieldset, input, textarea, p, blockquote, th, td { 
-  padding:0;
-  margin:0;}
-
-fieldset, img {border:0}
-
-ol, ul, li {list-style:none}
-
-:focus {outline:none}
-
-body,
-input,
-textarea,
-select {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  color: #4c4c4c;
-}
-
-p {
-  font-size: 12px;
-  width: 150px;
-  display: inline-block;
-  margin-left: 18px;
-}
 h1 {
   font-size: 32px;
   font-weight: 300;
@@ -114,36 +124,15 @@ h1 {
   text-align: center;
   padding-top: 10px;
   margin-bottom: 10px;
+  font-family: Poppins-Bold;
 }
 
-html{
-  background-color: #ffffff;
-}
-
-.testbox {
-  margin: 20px auto;
-  width: 343px; 
-  height: 464px; 
-  -webkit-border-radius: 8px/7px; 
-  -moz-border-radius: 8px/7px; 
-  border-radius: 8px/7px; 
-  background-color: #ebebeb; 
-  -webkit-box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
-  -moz-box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
-  box-shadow: 1px 2px 5px rgba(0,0,0,.31); 
-  border: solid 1px #cbc9c9;
-}
-
-input[type=radio] {
+input[type="radio"] {
   visibility: hidden;
 }
 
-form{
-  margin: 0 30px;
-}
-
 label.radio {
-	cursor: pointer;
+  cursor: pointer;
   text-indent: 35px;
   overflow: visible;
   display: inline-block;
@@ -153,9 +142,9 @@ label.radio {
 
 label.radio:before {
   background: #3a57af;
-  content:'';
+  content: "";
   position: absolute;
-  top:2px;
+  top: 2px;
   left: 0;
   width: 20px;
   height: 20px;
@@ -163,110 +152,194 @@ label.radio:before {
 }
 
 label.radio:after {
-	opacity: 0;
-	content: '';
-	position: absolute;
-	width: 0.5em;
-	height: 0.25em;
-	background: transparent;
-	top: 7.5px;
-	left: 4.5px;
-	border: 3px solid #ffffff;
-	border-top: none;
-	border-right: none;
+  opacity: 0;
+  content: "";
+  position: absolute;
+  width: 0.5em;
+  height: 0.25em;
+  background: transparent;
+  top: 7.5px;
+  left: 4.5px;
+  border: 3px solid #ffffff;
+  border-top: none;
+  border-right: none;
 
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
-input[type=radio]:checked + label:after {
-	opacity: 1;
+input[type="radio"]:checked + label:after {
+  opacity: 1;
 }
 
-hr{
+hr {
   color: #a9a9a9;
   opacity: 0.3;
 }
 
-input[type=text],input[type=password]{
-  width: 200px; 
-  height: 39px; 
-  -webkit-border-radius: 0px 4px 4px 0px/5px 5px 4px 4px; 
-  -moz-border-radius: 0px 4px 4px 0px/0px 0px 4px 4px; 
-  border-radius: 0px 4px 4px 0px/5px 5px 4px 4px; 
-  background-color: #fff; 
-  -webkit-box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
-  -moz-box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
-  box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"] {
+  width: 450px;
+  height: 39px;
+  -webkit-border-radius: 0px 4px 4px 0px/5px 5px 4px 4px;
+  -moz-border-radius: 0px 4px 4px 0px/0px 0px 4px 4px;
+  border-radius: 0px 4px 4px 0px/5px 5px 4px 4px;
+  background-color: #fff;
+  -webkit-box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.09);
+  -moz-box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.09);
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.09);
   border: solid 1px #cbc9c9;
   margin-left: -5px;
-  margin-top: 13px; 
+  margin-top: 13px;
   padding-left: 10px;
 }
 
-input[type=password]{
-  margin-bottom: 25px;
+
+
+input.form-control { /* CONTORNO DE INPUTS*/
+	outline: none;
+  border: none;
+
+}
+input:focus, input.form-control:focus {/* FOCO DE INPUTS*/
+
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
-#input-1 {
-  display: inline-block;
-  width: 30px;
-  background-color: #3a57af;
-  padding: 8px 0px 8px 15px;
-  margin-left: 15px;
-  -webkit-border-radius: 4px 0px 0px 4px; 
-  -moz-border-radius: 4px 0px 0px 4px; 
-  border-radius: 4px 0px 0px 4px;
-  color: white;
-  -webkit-box-shadow: 1px 2px 5px rgba(0,0,0,.09);
-  -moz-box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
-  box-shadow: 1px 2px 5px rgba(0,0,0,.09); 
-  border: solid 0px #cbc9c9;
+
+
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #b2b2b2;
+}
+.limiter {
+  width: 100%;
+  margin: 0 auto;
 }
 
-.gender {
-  margin-left: 30px;
-  margin-bottom: 30px;
+.container-login100 { /* Contenedor genera afuera*/
+  width: 100%;  
+  min-height: 90vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background: #ebeeef;
 }
-
-.accounttype{
-  margin-left: 8px;
-  margin-top: 20px;
+.limiter{
+   background: #ebeeef;
 }
-
-a.button {
-  font-size: 14px;
-  font-weight: 600;
-  color: white;
-  padding: 6px 25px 0px 20px;
-  margin: 10px 8px 20px 0px;
-  display: inline-block;
-  float: right;
-  text-decoration: none;
-  width: 50px; height: 27px; 
-  -webkit-border-radius: 5px; 
-  -moz-border-radius: 5px; 
-  border-radius: 5px; 
-  background-color: #3a57af; 
-  -webkit-box-shadow: 0 3px rgba(58,87,175,.75); 
-  -moz-box-shadow: 0 3px rgba(58,87,175,.75); 
-  box-shadow: 0 3px rgba(58,87,175,.75);
-  transition: all 0.1s linear 0s; 
-  top: 0px;
+.wrap-login100 {
+  width: 570px;
+  background: #fff;
+  border-radius: 10px; /*Bordes de contenedor blanco*/
+  overflow: hidden;
   position: relative;
 }
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #b2b2b2;
+}
+.login100-form {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px 88px 23px 45px;
+}
 
-a.button:hover {
-  top: 3px;
-  background-color:#2e458b;
-  -webkit-box-shadow: none; 
-  -moz-box-shadow: none; 
-  box-shadow: none;
-  
+input.input100 {
+  height: 45px;
 }
 
 
+.input100 {
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  color: #555555;
+  line-height: 1.2;
+
+  display: block;
+  width: 100%;
+  background: transparent;
+  padding: 0 5px;
+}
+
+.focus-input100 {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 576px) {
+  .login100-form {
+    padding: 43px 15px 57px 117px;
+  }
+}
+@media (max-width: 480px) {
+  .login100-form {
+    padding: 43px 15px 57px 15px;
+  }
+
+  .label-input100 {
+    text-align: left;
+    position: unset;
+    top: unset;
+    left: unset;
+    width: 100%;
+    padding: 0 5px;
+  }
+}
+/* boton color*/
+.login100-form-btn:hover {
+  background-color: #025a02;
+}
+
+.focus-input100::before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+
+  -webkit-transition: all 0.6s;
+  -o-transition: all 0.6s;
+  -moz-transition: all 0.6s;
+  transition: all 0.6s;
+
+  background: #57b846;
+}
+
+.input100:focus + .focus-input100::before {
+  width: 100%;
+}
+
+.has-val.input100 + .focus-input100::before {
+  width: 100%;
+}
 </style>

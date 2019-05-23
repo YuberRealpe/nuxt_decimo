@@ -1,5 +1,6 @@
-<template>
-    <div>      
+<template >
+
+    <div id="general"> 
         <navbar/>
         <nuxt/>
 
@@ -8,8 +9,14 @@
 <script>
 import navbar from '../components/navbar'
 export default {
-    components:{navbar}
-
+    components:{navbar},
+    
 
 }
 </script>
+<style>
+ #general{
+      background: #ebeeef;
+ }
+</style>
+

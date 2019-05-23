@@ -1,8 +1,10 @@
 export default{
+  
 modules: [
     'bootstrap-vue/nuxt'
 ],
 head: {
+  
     title: "Katui",
     meta: [
       { charset: 'utf-8' },
@@ -10,7 +12,7 @@ head: {
       { hid: 'description', name: 'description', content: "Tienda virtual" }
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '../pages/empresa/katui.png' },
+      { rel: 'icon', type: 'image/png', href: '/static/icon/icon.png' },
     ]
   },
   build: {
@@ -30,7 +32,9 @@ head: {
         'b-embed': 'src'
            
       }
-    }
+     
+    },
+    
   }
   
 }

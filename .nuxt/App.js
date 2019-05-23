@@ -10,7 +10,7 @@ import _6f6c098b from '..\\layouts\\default.vue'
 const layouts = { "_default": _6f6c098b }
 
 export default {
-  head: {"title":"Katui","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"Tienda virtual"}],"link":[{"rel":"icon","type":"image\u002Fpng","href":"..\u002Fpages\u002Fempresa\u002Fkatui.png"}],"style":[],"script":[]},
+  head: {"title":"Katui","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"Tienda virtual"}],"link":[{"rel":"icon","type":"image\u002Fpng","href":"\u002Fstatic\u002Ficon\u002Ficon.png"}],"style":[],"script":[]},
 
   render(h, props) {
     const loadingEl = h('NuxtLoading', { ref: 'loading' })

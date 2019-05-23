@@ -1,9 +1,12 @@
 <template>
-  <div class="container mt-4">
-    <div class="container text-center">
-      <h1>Categorias de productos</h1>
-    </div>
-    <div class="row">
+  <div class="container-login100">
+    <div class="wrap-login100">
+  
+      <h1 class="text-center">Categorias de productos</h1>
+    <div class="login100-form validate-form">
+    <div class="wrap-input100 validate-input m-b-26 alert-validate">
+      <div>
+        <div class="row">
       <div class="col-6">
         <p class="mt-3">Pagina numero: {{ currentPage }}</p>
       </div>
@@ -11,8 +14,6 @@
         <b-button variant="primary" href="/categorias/crear">Nuevo</b-button>
       </div>
     </div>
-    <div class="overflow-auto">
-      <div>
         <b-table responsivestriped hover :fields="fields" :items="categorias" id="list_products" :per-page="perPage" :current-page="currentPage" small>
           <template slot="acciones" slot-scope="row"> <!-- row trae los datos  y en este caso el id -->
             <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row)" class="mr-2" size="sm">Editar</b-button>
@@ -41,13 +42,20 @@
         
        >{{ String(msg) }}</b-modal>
       </div>
-      <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="list_products"></b-pagination>
+      
     </div>
+    
+  </div>
+  <div id="justi">
+      <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="list_products"></b-pagination>
+      </div>
+   </div>
   </div>
 </template>
 
 <script>
 import { db } from "../../services/firebase";
+
 var lec=null;
 
 export default {
@@ -148,3 +156,63 @@ export default {
 
 
 </script>
+<style>
+/*div{
+      border-top: 1px solid red;
+      border-right: 1px solid red;
+      border-bottom: 1px solid red;
+      border-left: 1px solid red;
+  }*/
+h1 {
+  font-size: 32px;
+  font-weight: 350;
+  color: #4c4c4c;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  font-family: Poppins-Bold;
+}
+.container-login100 { /* Contenedor genera afuera*/
+  width: 100%;  
+  min-height: 90vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background: #ebeeef;
+}
+.wrap-login100 { /* Contenedor blanco div*/
+  
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 10px; /*Bordes de contenedor blanco*/
+  overflow: hidden;
+  position: relative;
+}
+.login100-form {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px 67px 45px 45px;
+}
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #b2b2b2;
+}
+#justi{
+  width: 100%;
+  display: flex;
+   justify-content: center;
+}
+</style>
