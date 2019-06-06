@@ -4,7 +4,7 @@
   <b-alert :show="showDismissibleAlert" 
      @dismissed="showDismissibleAlert=false"
      variant="success" dismissible>
-      Usuario registrado con exito!
+      Se ha enviado un mensaje de confirmacion a tu Correo Electronico!
     </b-alert>
   <div class="container-login100">
       <div class="wrap-login100">
@@ -89,10 +89,17 @@ export default {
             displayName: this.form.nombre,
             //photoURL
           }).then(resUpdate=>{
-            this.$router.push({
+            
+            res.user.sendEmailVerification().then( ms=> {
+              this.$router.push({
               path: "/"
             });
-            this.showAlert();
+              this.showAlert(); 
+            }).catch(errs=>{
+             
+            
+            });
+            
           })
           
         }).catch(err => {
@@ -100,6 +107,7 @@ export default {
         });
         
     },
+    
       showAlert() {
         this.showDismissibleAlert=true
         

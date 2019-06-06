@@ -60,6 +60,9 @@ export default {
            
       this.msg = 'El producto se guardo correctamente!';
             this.$root.$emit("bv::show::modal", "hecho");
+            this.$router.push({
+              path: "/productos"
+            });
           
     }
   }

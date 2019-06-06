@@ -11,8 +11,11 @@
           class="input100"
           placeholder=" cargar imagen"
           accept="image/"
-          v-model="imageProduct"/>
-          
+          v-model="imageProduct"
+          required
+          />
+      </b-form-group>
+      <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">
           <label for="nombre">Nombre</label>
           <b-form-input   class="input100" v-model="form.nombre" id="nombre" type="text" required placeholder="Ingrese nombre"></b-form-input>
           <span class="focus-input100"></span>

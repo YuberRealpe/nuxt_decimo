@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { interopDefault } from './utils'
 
+const _63a8e52d = () => interopDefault(import('..\\pages\\carrito.vue' /* webpackChunkName: "pages_carrito" */))
 const _2235ab59 = () => interopDefault(import('..\\pages\\categorias\\index.vue' /* webpackChunkName: "pages_categorias_index" */))
 const _51fe6f10 = () => interopDefault(import('..\\pages\\contacto.vue' /* webpackChunkName: "pages_contacto" */))
 const _86b433f0 = () => interopDefault(import('..\\pages\\productos\\index.vue' /* webpackChunkName: "pages_productos_index" */))
@@ -86,6 +87,10 @@ export function createRouter() {
     scrollBehavior,
 
     routes: [{
+      path: "/carrito",
+      component: _63a8e52d,
+      name: "carrito"
+    }, {
       path: "/categorias",
       component: _2235ab59,
       name: "categorias"
