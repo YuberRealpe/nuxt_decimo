@@ -2,34 +2,66 @@
 
  <div class="container">
   
-     <h1>Iniciar</h1>
-    <b-form  @submit="onSubmit" @reset="onReset">
-      <b-form-group
-        id="input-group-1"
-        label="Correo electronico:"
-        label-for="input-1"
-        description="Nunca compartiremos tu correo electrónico con alguien más.."
-      >
-        <b-form-input
-          id="input-1"
-          v-model="form.email"
-          type="email"
-          required
-          placeholder="Enter email"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-4" label="Contraseña:" label-for="input-4">
-        <b-form-input
-          id="input-4"
-          type='password'
-          v-model="form.password"
-          required
-          placeholder="Ingresa una contraseña mayor a 8 caracteres"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-button type="submit" variant="success">Registrarse</b-button>
-    </b-form>
+     <b-card>
+              <b-card-text>
+                <h3 style="font-weight:bold">{{producto.nombre}}</h3>
+                <a style="cursor:pointer ">
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    height="20"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    height="20"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    height="20"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    height="20"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    height="20"
+                  >
+                </a>
+                <br>
+                <a style="font-size: 300%">{{producto.precio | currency}}</a>
+                <br>
+                <a>
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/1259/PNG/512/1495815258-jd02_84598.png"
+                    height="28"
+                  > Medios de pago
+                </a>
+                <br>
+                <a style="cursor:pointer ">
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/visa_512_icon-icons.com_75986.png"
+                    height="40"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/mastercard_512_icon-icons.com_75982.png"
+                    height="40"
+                  >
+                  <img
+                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/paypal_512_icon-icons.com_75983.png"
+                    height="40"
+                  >
+                </a>
+                <br>
+                <div >
+                  <p>Cantidad</p>
+                  <b-form-select v-model="selected" :options="options"></b-form-select>
+                  ({{producto.cantidad}} Disponibles)
+                </div>
+                <div class="d-flex justify-content-center">
+                  <b-button block variant="info">Comprar</b-button>
+                </div>
+              </b-card-text>
+            </b-card>
 
   </div>
 </template>
