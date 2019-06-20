@@ -18,7 +18,7 @@
         <b-table responsivestriped hover :fields="fields" :items="productos" id="list_products" :per-page="perPage" :current-page="currentPage" small>
           <template slot="acciones" slot-scope="row"> <!-- row trae los datos  y en este caso el id -->
             <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row)" class="mr-2" size="sm">Editar</b-button>
-            <b-button size="sm" @click='eliminar(row.item.id)' class="mr-2" variant="danger" type="button">Eliminar</b-button>
+            <b-button size="sm" @click="$bvModal.show('hecho');asignarmsg(row.item.id)" class="mr-2" variant="danger" type="button">Eliminar</b-button>
           </template>
         </b-table>
         <b-modal id="modal-prevent-closing" ref="modal" title="Editar Producto"  @show="resetModal" @hidden="resetModal" @ok="handleOk">
@@ -41,8 +41,26 @@
           okVariant='success'
           headerClass='p-2 border-bottom-0'
           footerClass= 'p-2 border-top-0'
-        
-       >{{ String(msg) }}</b-modal>
+       >
+      <b-container fluid>
+       {{ String(msg) }}
+      </b-container>
+      
+      <template slot="modal-footer"  >
+      <div v-show="Validars">
+      <!-- Emulate built in modal footer ok and cancel button actions -->
+      <b-button size="sm"  @click="esconder()">
+        Cancelar
+      </b-button>
+      <b-button size="sm" variant="danger" @click="eliminar(elim_id)">
+        Eliminar
+      </b-button>
+</div>
+  
+        </template>
+      
+   
+       </b-modal>
       </div>
       
     </div>
@@ -85,7 +103,9 @@ export default {
   },
   data() {
     return {
+       Validars:true,
       msg:null,
+      elim_id:null,
       nombreState: null,
       precioState:null,
       cantidadState:null,
@@ -93,7 +113,15 @@ export default {
     };
   },
   methods: {
-
+    asignarmsg(id){
+      this.msg = "Desea eliminar este producto?"
+      this.elim_id = id
+      this.Validars= true
+    },
+    esconder(){
+     this.$bvModal.hide('hecho')
+    
+    },
     eliminar(id) {
       let index;
       this.productos.map((value,key)=>{
@@ -104,9 +132,10 @@ export default {
       db.collection("productos").doc(id).delete().then(()=>{
         this.productos.splice(index,1);
       });
-          this.msg = 'El producto ha eliminado!';
-            this.$root.$emit("bv::show::modal", "hecho");("Eliminado");
-
+        this.Validars=false
+        this.msg = 'El producto ha sido eliminado!';
+        this.$root.$emit("bv::show::modal", "hecho");("Eliminado");
+       
     },
     checkFormValidity() {
         const valid = this.$refs.form.checkValidity()
@@ -148,9 +177,12 @@ export default {
       },
       asignar(row){
         lec = row.item.id;
-        nombre.value = row.item.nombre;
-        precio.value = row.item.precio;
-        cantidad.value = row.item.cantidad;
+        
+        nombre.value= row.item.nombre,
+        precio.value= row.item.precio,
+        cantidad.value=row.item.cantidad
+        
+        
 
       }
  

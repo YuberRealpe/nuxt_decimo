@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "nuxt",
     "generate": "nuxt generate",
-    "deploy":"npm run generate && firebase deploy"
+    "deploy": "npm run generate && firebase deploy"
   },
   "author": "Yuber Realpe",
   "license": "ISC",
   "dependencies": {
-    "bootstrap-vue": "^2.0.0-rc.16",
-    "firebase": "^5.9.2",
-    "nuxt": "^2.4.5"
+    "bootstrap-vue": "^2.0.0-rc.24",
+    "firebase": "^5.11.1",
+    "nuxt": "^2.8.1",
+    "vue-currency-filter": "^3.4.2"
   },
   "devDependencies": {
     "core-js": "^2.6.5"

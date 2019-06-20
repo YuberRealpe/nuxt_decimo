@@ -2,15 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { interopDefault } from './utils'
 
-const _63a8e52d = () => interopDefault(import('..\\pages\\carrito.vue' /* webpackChunkName: "pages_carrito" */))
-const _2235ab59 = () => interopDefault(import('..\\pages\\categorias\\index.vue' /* webpackChunkName: "pages_categorias_index" */))
-const _51fe6f10 = () => interopDefault(import('..\\pages\\contacto.vue' /* webpackChunkName: "pages_contacto" */))
-const _86b433f0 = () => interopDefault(import('..\\pages\\productos\\index.vue' /* webpackChunkName: "pages_productos_index" */))
-const _3de48f4d = () => interopDefault(import('..\\pages\\usuario\\index.vue' /* webpackChunkName: "pages_usuario_index" */))
-const _75de108e = () => interopDefault(import('..\\pages\\categorias\\crear.vue' /* webpackChunkName: "pages_categorias_crear" */))
-const _104e4b3d = () => interopDefault(import('..\\pages\\productos\\crear.vue' /* webpackChunkName: "pages_productos_crear" */))
-const _dce616fc = () => interopDefault(import('..\\pages\\usuario\\crear.vue' /* webpackChunkName: "pages_usuario_crear" */))
-const _4fa1a20e = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _03e6ff2d = () => interopDefault(import('..\\pages\\carrito.vue' /* webpackChunkName: "pages_carrito" */))
+const _471b4559 = () => interopDefault(import('..\\pages\\categorias\\index.vue' /* webpackChunkName: "pages_categorias_index" */))
+const _3e85ee78 = () => interopDefault(import('..\\pages\\contacto.vue' /* webpackChunkName: "pages_contacto" */))
+const _10b5e7f0 = () => interopDefault(import('..\\pages\\productos\\index.vue' /* webpackChunkName: "pages_productos_index" */))
+const _5a75354d = () => interopDefault(import('..\\pages\\usuario\\index.vue' /* webpackChunkName: "pages_usuario_index" */))
+const _ca78aae4 = () => interopDefault(import('..\\pages\\categorias\\crear.vue' /* webpackChunkName: "pages_categorias_crear" */))
+const _4b4d713d = () => interopDefault(import('..\\pages\\productos\\crear.vue' /* webpackChunkName: "pages_productos_crear" */))
+const _a3c4cafc = () => interopDefault(import('..\\pages\\usuario\\crear.vue' /* webpackChunkName: "pages_usuario_crear" */))
+const _e5dfbb9a = () => interopDefault(import('..\\pages\\busqueda\\_slug.vue' /* webpackChunkName: "pages_busqueda__slug" */))
+const _75a86e0e = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 Vue.use(Router)
 
@@ -81,46 +82,50 @@ const scrollBehavior = function (to, from, savedPosition) {
 export function createRouter() {
   return new Router({
     mode: 'history',
-    base: '/',
+    base: decodeURI('/'),
     linkActiveClass: 'nuxt-link-active',
     linkExactActiveClass: 'nuxt-link-exact-active',
     scrollBehavior,
 
     routes: [{
       path: "/carrito",
-      component: _63a8e52d,
+      component: _03e6ff2d,
       name: "carrito"
     }, {
       path: "/categorias",
-      component: _2235ab59,
+      component: _471b4559,
       name: "categorias"
     }, {
       path: "/contacto",
-      component: _51fe6f10,
+      component: _3e85ee78,
       name: "contacto"
     }, {
       path: "/productos",
-      component: _86b433f0,
+      component: _10b5e7f0,
       name: "productos"
     }, {
       path: "/usuario",
-      component: _3de48f4d,
+      component: _5a75354d,
       name: "usuario"
     }, {
       path: "/categorias/crear",
-      component: _75de108e,
+      component: _ca78aae4,
       name: "categorias-crear"
     }, {
       path: "/productos/crear",
-      component: _104e4b3d,
+      component: _4b4d713d,
       name: "productos-crear"
     }, {
       path: "/usuario/crear",
-      component: _dce616fc,
+      component: _a3c4cafc,
       name: "usuario-crear"
     }, {
+      path: "/busqueda/:slug?",
+      component: _e5dfbb9a,
+      name: "busqueda-slug"
+    }, {
       path: "/",
-      component: _4fa1a20e,
+      component: _75a86e0e,
       name: "index"
     }],
 

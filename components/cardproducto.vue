@@ -8,7 +8,7 @@
           class="shadow cursor mb-2"
           border-variant="default"
           
-          @click="open"
+          @click="open(slug)"
           @mouseover="Validars=true"
           @mouseleave="Validars=false"
            >
@@ -17,11 +17,11 @@
 
             <b-row no-gutters>
             
-                <b-col md="6" style="font-size:16px;" id=descuentos>
-                    ${{precio | money filter}}
+                <b-col md="6" style="font-size:16px;font-weight: bold;" id=descuentos>
+                    {{precio | currency}}
                 </b-col>
                     
-                <b-col md="6" class="text-right" style="font-size:14px; color:#00c331">
+                <b-col md="6" class="text-right" style="font-size:14px; color:#00c331;">
                     15% Descuento
                 </b-col>
             </b-row>
@@ -45,8 +45,11 @@ export default {
     },
     props:['precio','nombre','urlImagen','slug'],
     methods:{
-        open(){
- 
+        open(slug){
+            this.$router.push({
+              path: "/busqueda/"+slug
+            });
+            
             
         },
         

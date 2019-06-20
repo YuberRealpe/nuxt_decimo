@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
+import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
 import '..\\node_modules\\bootstrap\\dist\\css\\bootstrap.css'
 
@@ -41,10 +42,7 @@ export default {
       domProps: {
         id: '__nuxt'
       }
-    }, [
-      loadingEl,
-      transitionEl
-    ])
+    }, [loadingEl, h(NuxtBuildIndicator), transitionEl])
   },
   data: () => ({
     isOnline: true,

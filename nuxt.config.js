@@ -1,7 +1,15 @@
 export default{
   
 modules: [
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    ['vue-currency-filter/nuxt', {
+      symbol: '$',
+      thousandsSeparator: '.',
+      fractionCount: 0,
+      fractionSeparator: ',',
+      symbolPosition: 'front',
+      symbolSpacing: true
+    }],
 ],
 head: {
   

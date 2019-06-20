@@ -10,7 +10,8 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 
 /* Plugins */
 
-import nuxt_plugin_bootstrapvue_3d830dc8 from 'nuxt_plugin_bootstrapvue_3d830dc8' // Source: ./bootstrap-vue.js (mode: 'all')
+import nuxt_plugin_bootstrapvue_9719d3fc from 'nuxt_plugin_bootstrapvue_9719d3fc' // Source: .\\bootstrap-vue.js (mode: 'all')
+import nuxt_plugin_vuecurrencyfilter_6f8a2c08 from 'nuxt_plugin_vuecurrencyfilter_6f8a2c08' // Source: .\\vue-currency-filter.js (mode: 'all')
 
 // Component: <NoSsr>
 Vue.component(NoSsr.name, NoSsr)
@@ -68,7 +69,7 @@ async function createApp(ssrContext) {
       dateErr: null,
       error(err) {
         err = err || null
-        app.context._errored = !!err
+        app.context._errored = Boolean(err)
         err = err ? normalizeError(err) : null
         const nuxt = this.nuxt || this.$options.nuxt
         nuxt.dateErr = Date.now()
@@ -100,7 +101,8 @@ async function createApp(ssrContext) {
     payload: ssrContext ? ssrContext.payload : undefined,
     req: ssrContext ? ssrContext.req : undefined,
     res: ssrContext ? ssrContext.res : undefined,
-    beforeRenderFns: ssrContext ? ssrContext.beforeRenderFns : undefined
+    beforeRenderFns: ssrContext ? ssrContext.beforeRenderFns : undefined,
+    ssrContext
   })
 
   const inject = function (key, value) {
@@ -128,7 +130,13 @@ async function createApp(ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_bootstrapvue_3d830dc8 === 'function') await nuxt_plugin_bootstrapvue_3d830dc8(app.context, inject)
+  if (typeof nuxt_plugin_bootstrapvue_9719d3fc === 'function') {
+    await nuxt_plugin_bootstrapvue_9719d3fc(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_vuecurrencyfilter_6f8a2c08 === 'function') {
+    await nuxt_plugin_vuecurrencyfilter_6f8a2c08(app.context, inject)
+  }
 
   // If server-side, wait for async component to be resolved first
   if (process.server && ssrContext && ssrContext.url) {

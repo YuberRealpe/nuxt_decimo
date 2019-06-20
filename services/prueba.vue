@@ -37,13 +37,16 @@
 <script>
   export default {
     data() {
-      return {
-        form: {
-          email: '',
-          password: '',
-        },
-        
-      }
+      return db.collection('productos').where('slug', '==', 'combo').get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data());
+        alert(doc.data().precio)
+      });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
     },
     methods: {
       onSubmit(evt) {
