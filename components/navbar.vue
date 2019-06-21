@@ -33,9 +33,9 @@
 
       <b-navbar-nav class="ml-auto" >
           <!-- Items del navbar-nav  con direcciones, auto alinea hacia la derecha-->
-          <b-nav-item href="/carrito">Carrito de Compras</b-nav-item>
-          <b-nav-item href="/categorias">Categorias</b-nav-item>
-          <b-nav-item href="/productos" >Productos</b-nav-item>
+          <b-nav-item href="/carrito" v-if="user">Carrito de Compras</b-nav-item>
+          <b-nav-item href="/categorias" v-if="user">Categorias</b-nav-item>
+          <b-nav-item href="/productos"  v-if="user">Productos</b-nav-item>
           <b-nav-item href="/usuario/crear" v-if="!user">Crear cuenta</b-nav-item>
           <b-nav-item href="/usuario" v-if="!user">Ingresar</b-nav-item>
     

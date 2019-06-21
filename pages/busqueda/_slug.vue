@@ -89,11 +89,11 @@
           <br>
                 <div >
                   <p>Cantidad</p>
-                  <b-form-select v-model="selected" :options="options"></b-form-select>
+                  <b-form-select v-model="carro.cantidad" :options="options"></b-form-select>
                   ({{producto.cantidad}} Disponibles)
                 </div>
 
-        <b-button  block variant="primary" class="pb-2">Agregar al carrito de compra</b-button>
+        <b-button  block variant="primary" class="pb-2" @click="agregarCarro()">Agregar al carrito de compra</b-button>
       </div>
     </div>
     
@@ -101,21 +101,67 @@
   </div>
    <div class="wrap-login100 container">
       <h1>Comentarios</h1>
+        <b-form @submit.prevent="guardar">
+        
+          <div class="input-group">
+            <b-form-textarea
+              v-model="formul.comentario"
+              size="sm"
+              placeholder="Escribe un comentario"
+            ></b-form-textarea>
+            
+            <b-button variant="info" type="submit">publicar</b-button>
+          </div>
+        </b-form>
+
+      <div class="row" v-for="value in comentar" :key="value.id"> 
+            <div class="col-12 ">
+                <b-media class="mt-4 shadow p-3 mb-4 rounded border border-secondary">
+              <b-img 
+                slot="aside"
+                src="https://cdn.icon-icons.com/icons2/827/PNG/512/user_icon-icons.com_66546.png"
+                height="30"
+              ></b-img>
+
+              <h5 class="mt-0 mb-1" >{{value.producto.usuario}}</h5>
+              <p class="mb-0">{{value.producto.comentario}}</p>
+            </b-media>
+            </div>
+        </div>
    </div>
+   <b-modal id="hecho" 
+          size='sm'
+          buttonSize='sm'
+          okVariant='success'
+          headerClass='p-2 border-bottom-0'
+          footerClass= 'p-2 border-top-0'
+          
+       >
+       <div class="text-center">{{ String(msg) }}</div>
+       
+       </b-modal>
  </div>
 
 </template>
 
 <script>
 import { db } from "../../services/firebase"
+import {auth} from '../../services/firebase'
 
 export default {
      data(){
          return {
+            msg: null,
              id:this.$route.params.slug,
              producto:[],
              comentar:[],
              mainProps: { blank: true, width: 50, height: 40, class: 'm1' },
+             carro: {
+               cantidad: null,
+               producto: null,
+               usuario: null,
+               valor: null,
+             },
              selected: null,
           options: [
                 { value: null, text: "Seleccione una opcion"},
@@ -123,43 +169,65 @@ export default {
                 { value: "2", text: "2 unidades" },
                 { value: "3", text: "3 unidades" },
                 { value: "4", text: "4 unidades" }
-              ]         
+              ],
+              formul: {
+        comentario: "",
+        usuario: "",
+        producto: ""
+      },         
          }
      },
      created(){
-        this.traerdatos(),
-        this.traercomentarios()
+        this.traerdatos();
+        this.traercomentarios();
     },
   methods:{
+     agregarCarro(){
+          this.carro.valor = this.producto.precio,
+        this.carro.precio = this.producto.precio,
+        this.carro.usuario = auth.currentUser.uid;
+        this.carro.producto = '/productos/'+this.producto.id
+        alert(this.producto.productosRef)
+        this.msg = 'Producto agregado al carro de compra!';
+              this.$root.$emit("bv::show::modal", "hecho");
+        //db.collection('carrito').add(this.carro);
+     },
      traerdatos(){
      
       return db.collection('productos').where('slug','==',this.id).onSnapshot(productSnap=>{
                 this.producto = []
+
                 productSnap.forEach(async valueCarrito =>{
+
                     this.producto = valueCarrito.data()
+                    this.producto.id= valueCarrito.id
                 })
             })
 
      }
-    },
+    ,
     traercomentarios(){
-     return db.collection('comentarios').where("producto", "==", this.id).onSnapshot(carritoSnap=>{
-            this.carrito = []
-            carritoSnap.forEach(async valueCarrito =>{
-                let producto = await valueCarrito.data().producto.get();
-
-                producto = producto.data();
-                this.carrito.push({
-                    id: valueCarrito.id,
-                    cantidad: valueCarrito.data().cantidad,
-                    valor: valueCarrito.data().valor,
+     return db.collection('comentarios').where("producto", "==", this.id).onSnapshot(comentarSnap=>{
+            this.comentar = []
+            comentarSnap.forEach(async valueCarrito =>{
+                let producto = valueCarrito.data();
+              
+                this.comentar.push({
                     producto
                 })
             })
 
         })
+    },
+    guardar() {
+      this.formul.usuario = auth.currentUser.displayName;
+      this.formul.producto = this.$route.params.slug;
+      db.collection("comentarios").add(this.formul);
+    },
+    },
+    
     }
-  }
+  
 </script>
 
 <style>
