@@ -20,7 +20,7 @@ head: {
       { hid: 'description', name: 'description', content: "Tienda virtual" }
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '/static/icon/icon.png' },
+      { rel: 'icon', type: 'image/png', href:'/static/icon/icon.png' },
     ]
   },
   build: {

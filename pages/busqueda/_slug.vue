@@ -44,56 +44,52 @@
         <div style="font-size:25px;font-weight: 649;">{{producto.nombre}} </div>
         <a style="cursor:pointer ">
                   <img
-                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    src='https://cdn.pixabay.com/photo/2014/04/02/10/17/star-303363_960_720.png'
                     height="20"
                   >
                   <img
-                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    src="https://cdn.pixabay.com/photo/2014/04/02/10/17/star-303363_960_720.png"
                     height="20"
                   >
                   <img
-                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    src="https://cdn.pixabay.com/photo/2014/04/02/10/17/star-303363_960_720.png"
                     height="20"
                   >
                   <img
-                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    src="https://cdn.pixabay.com/photo/2014/04/02/10/17/star-303363_960_720.png"
                     height="20"
                   >
                   <img
-                    src="https://cdn.icon-icons.com/icons2/93/PNG/256/star_favorite_favourite_16767.png"
+                    src="https://cdn.pixabay.com/photo/2014/04/02/10/17/star-303363_960_720.png"
                     height="20"
                   >
                 </a>
         <div style="font-size:40px">{{producto.precio | currency}} </div>
             <a>
                <img
-                    src="https://cdn.icon-icons.com/icons2/1259/PNG/512/1495815258-jd02_84598.png"
+                    src="data:image/png;base64,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"
                      height="28"
                   > Medios de pago
                  </a>
                  <br>
             <a style="cursor:pointer ">
                   <img
-                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/visa_512_icon-icons.com_75986.png"
+                    src="http://www.puertopixel.com/wp-content/uploads/tarjetas.jpg"
                     height="40"
                   >
-                  <img
-                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/mastercard_512_icon-icons.com_75982.png"
-                    height="40"
-                  >
-                  <img
-                    src="https://cdn.icon-icons.com/icons2/1023/PNG/512/paypal_512_icon-icons.com_75983.png"
-                    height="40"
-                  >
+                 
                 </a>
           <br>
                 <div >
                   <p>Cantidad</p>
-                  <b-form-select v-model="carro.cantidad" :options="options"></b-form-select>
-                  ({{producto.cantidad}} Disponibles)
+                  {{producto.cantidad}} Disponibles
+                   <b-form>
+                  <b-form-select v-model="selected" :options="options" required></b-form-select>
+                        <b-button  type="submit" block variant="primary" class="pb-2" @click="agregarCarro()">Agregar al carrito de compra</b-button>
+                  </b-form>
                 </div>
 
-        <b-button  block variant="primary" class="pb-2" @click="agregarCarro()">Agregar al carrito de compra</b-button>
+        
       </div>
     </div>
     
@@ -186,11 +182,11 @@ export default {
           this.carro.valor = this.producto.precio,
         this.carro.precio = this.producto.precio,
         this.carro.usuario = auth.currentUser.uid;
-        this.carro.producto = '/productos/'+this.producto.id
-        alert(this.producto.productosRef)
+        this.carro.producto = db.collection('productos').doc(this.producto.id);
+        alert(auth.currentUser.uid)
         this.msg = 'Producto agregado al carro de compra!';
               this.$root.$emit("bv::show::modal", "hecho");
-        //db.collection('carrito').add(this.carro);
+        db.collection('carrito').add(this.carro);
      },
      traerdatos(){
      

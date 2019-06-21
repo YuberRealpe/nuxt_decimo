@@ -11,7 +11,7 @@
                       <h2>{{ value.producto.nombre}}</h2>
                   </div>
                   <div class="col">
-                      <h2>Cantidad: {{ value.producto.cantidad}}</h2>
+                      <h2>Cantidad: {{ value.cantidad}}</h2>
                   </div>
                 </div>
                
