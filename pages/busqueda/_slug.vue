@@ -7,18 +7,16 @@
     <div class="row m-4">
       <div class="col-2">
         <b-list-group >
-          <b-list-group-item button>
-            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen}`" alt="image slot">
+          <b-list-group-item id="img1" button>
+            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen}`" alt="image slot"  @mouseover="enfo" >
           </b-list-group-item>
-          <b-list-group-item button>
-            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen}`" alt="image slot">
+          <b-list-group-item id="img2" v-if="producto.hasOwnProperty('imagen2')" button>
+            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen2}`" alt="image slot" @mouseover="enfo2" >
           </b-list-group-item>
-          <b-list-group-item button>
-            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen}`" alt="image slot">
+          <b-list-group-item id="img3"  v-if="producto.hasOwnProperty('imagen3')" button>
+            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen3}`" alt="image slot" @mouseover="enfo3" >
           </b-list-group-item>
-          <b-list-group-item button>
-            <img slot="img" class="d-block img-fluid w-100" :src="`${producto.imagen}`" alt="image slot">
-          </b-list-group-item>
+
       </b-list-group>
       </div>
       <div class="col-5">
@@ -26,18 +24,25 @@
           <b-carousel
           id="carousel-no-animation"
           style="text-shadow: 0px 0px 2px #000"
-          no-animation
           controls
-          indicators
+          v-model="indice"
           img-width="500"
           img-height="480"
+          :interval="4000"
+          :sliding-start="slin"
+           hover-pause
         >
-            <b-carousel-slide
-            
-            >
-            <img slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${producto.imagen}`" alt="image slot">
+            <b-carousel-slide>
+            <img   slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${producto.imagen}`" alt="image slot">
+            </b-carousel-slide>
+            <b-carousel-slide>
+            <img  v-if="producto.hasOwnProperty('imagen2')"  slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${producto.imagen2}`" alt="image slot">
+            </b-carousel-slide>
+            <b-carousel-slide>
+            <img  v-if="producto.hasOwnProperty('imagen3')"  slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${producto.imagen3}`" alt="image slot">
             </b-carousel-slide>
             
+
         </b-carousel>
       </div>
       <div class="col-5"  >
@@ -81,12 +86,22 @@
                 </a>
           <br>
                 <div >
-                  <p>Cantidad</p>
-                  {{producto.cantidad}} Disponibles
-                   <b-form>
-                  <b-form-select v-model="selected" :options="options" required></b-form-select>
-                        <b-button  type="submit" block variant="primary" class="pb-2" @click="agregarCarro()">Agregar al carrito de compra</b-button>
+                   <b-form @submit="agregarCarro" v-if="show">
+
+                     <b-form-group id="input-group-3" label="Cantidad" label-for="input-3">
+                       
+                      <b-form-select
+                        id="input-3"
+                        v-model="form.cantidad" 
+                        :options="options" 
+                        required
+                      ></b-form-select>
+                        ({{producto.cantidad}} Disponibles)
+                    </b-form-group>
+                      
+                        <b-button  type="submit" block variant="primary" class="pb-2" >Agregar al carrito de compra</b-button>
                   </b-form>
+                  
                 </div>
 
         
@@ -104,6 +119,7 @@
               v-model="formul.comentario"
               size="sm"
               placeholder="Escribe un comentario"
+              required
             ></b-form-textarea>
             
             <b-button variant="info" type="submit">publicar</b-button>
@@ -147,30 +163,47 @@ import {auth} from '../../services/firebase'
 export default {
      data(){
          return {
-            msg: null,
+            //Carrusel
+            indice:0,
+            slin:true,
+
+            //Mensaje modal
+             msg: null,
+
+            //Recibir Slug
              id:this.$route.params.slug,
+
+            //Recibir Consultas
              producto:[],
              comentar:[],
-             mainProps: { blank: true, width: 50, height: 40, class: 'm1' },
-             carro: {
+
+             mainProps: { blank: true, width: 50, height: 40, class: 'm1' }, // Propiedades Imagen
+
+            // Formulario Agregar a carrito
+             form:{
                cantidad: null,
                producto: null,
                usuario: null,
                valor: null,
+               precio:null
              },
-             selected: null,
-          options: [
+             //opciones de Select
+              options: [
                 { value: null, text: "Seleccione una opcion"},
                 { value: "1", text: "1 unidad" },
                 { value: "2", text: "2 unidades" },
                 { value: "3", text: "3 unidades" },
                 { value: "4", text: "4 unidades" }
               ],
+              // Activas mensajes validadores
+              show: true, 
+
+              //Formulario Agregar a comentarios
               formul: {
-        comentario: "",
-        usuario: "",
-        producto: ""
-      },         
+                comentario: "",
+                usuario: "",
+                producto: ""
+              },         
          }
      },
      created(){
@@ -178,17 +211,22 @@ export default {
         this.traercomentarios();
     },
   methods:{
-     agregarCarro(){
-          this.carro.valor = this.producto.precio,
-        this.carro.precio = this.producto.precio,
-        this.carro.usuario = auth.currentUser.uid;
-        this.carro.producto = db.collection('productos').doc(this.producto.id);
-        alert(auth.currentUser.uid)
+     agregarCarro(evt){ // AGREGAR PRODUCTO A CARRITO
+        
+        evt.preventDefault()
+        
+        this.form.valor = this.producto.precio,
+        this.form.precio = this.producto.precio,
+        this.form.usuario = auth.currentUser.uid;                               //Agregar Id de usuario
+        this.form.producto = db.collection('productos').doc(this.producto.id);  //Agrear coleccion de producto
+
+        db.collection('carrito').add(this.form);                                //Agregar a Carrito
+
         this.msg = 'Producto agregado al carro de compra!';
-              this.$root.$emit("bv::show::modal", "hecho");
-        db.collection('carrito').add(this.carro);
+        this.$root.$emit("bv::show::modal", "hecho");
+        
      },
-     traerdatos(){
+     traerdatos(){ // TRAER DATOS DE PRODUCTO SEGUN SLUG
      
       return db.collection('productos').where('slug','==',this.id).onSnapshot(productSnap=>{
                 this.producto = []
@@ -202,7 +240,7 @@ export default {
 
      }
     ,
-    traercomentarios(){
+    traercomentarios(){ //TRAER COMENTARIOS SEGUN PRODUCTO
      return db.collection('comentarios').where("producto", "==", this.id).onSnapshot(comentarSnap=>{
             this.comentar = []
             comentarSnap.forEach(async valueCarrito =>{
@@ -215,11 +253,27 @@ export default {
 
         })
     },
-    guardar() {
+    guardar(evt) { // GUARDAR COMENTARIOS
+    
+      evt.preventDefault()
       this.formul.usuario = auth.currentUser.displayName;
       this.formul.producto = this.$route.params.slug;
       db.collection("comentarios").add(this.formul);
     },
+
+      enfo(){
+        this.indice=0;
+        img1.focus();
+      },
+      enfo2(){
+        this.indice=1;
+        img2.focus();
+      },
+      enfo3(){
+        this.indice=2;
+        img3.focus();
+      },
+      
     },
     
     }

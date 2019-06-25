@@ -11,6 +11,7 @@ const _ca78aae4 = () => interopDefault(import('..\\pages\\categorias\\crear.vue'
 const _4b4d713d = () => interopDefault(import('..\\pages\\productos\\crear.vue' /* webpackChunkName: "pages_productos_crear" */))
 const _a3c4cafc = () => interopDefault(import('..\\pages\\usuario\\crear.vue' /* webpackChunkName: "pages_usuario_crear" */))
 const _e5dfbb9a = () => interopDefault(import('..\\pages\\busqueda\\_slug.vue' /* webpackChunkName: "pages_busqueda__slug" */))
+const _17074ad4 = () => interopDefault(import('..\\pages\\editar\\_slug.vue' /* webpackChunkName: "pages_editar__slug" */))
 const _75a86e0e = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 Vue.use(Router)
@@ -123,6 +124,10 @@ export function createRouter() {
       path: "/busqueda/:slug?",
       component: _e5dfbb9a,
       name: "busqueda-slug"
+    }, {
+      path: "/editar/:slug?",
+      component: _17074ad4,
+      name: "editar-slug"
     }, {
       path: "/",
       component: _75a86e0e,

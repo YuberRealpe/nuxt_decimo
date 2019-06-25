@@ -3,9 +3,8 @@
     <div class="wrap-login100">
 
     <h2 class="text-center">Carrito de Compras</h2>
-
          <div class="row mt-4" v-for="value in carrito" :key="value.id"> 
-            <div block class="col-12 shadow p-3 mb-4 rounded border border-seconda"  slot="aside">
+            <div v-if="value.producto.hasOwnProperty('nombre')"  block class="col-12 shadow p-3 mb-4 rounded border border-seconda"  slot="aside">
                 <div class="row"> 
                   <div class="col">
                       <h2>{{ value.producto.nombre}}</h2>
@@ -16,7 +15,11 @@
                 </div>
                
             </div>
+            <div v-else block class="col-12 shadow p-3 mb-4 rounded border border-seconda"  slot="aside">
+              <p>No se encontraron productos</p>
         </div>
+        </div>
+        
           <b-button variant="success">Finalizar Compra</b-button>
     </div>
 </div>
@@ -39,7 +42,6 @@ export default {
             this.carrito = []
             carritoSnap.forEach(async valueCarrito =>{
                 let producto = await valueCarrito.data().producto.get();
-
                 producto = producto.data();
                 this.carrito.push({
                     id: valueCarrito.id,
@@ -47,6 +49,7 @@ export default {
                     valor: valueCarrito.data().valor,
                     producto
                 })
+               
             })
 
         })

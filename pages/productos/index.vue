@@ -15,24 +15,53 @@
         <b-button variant="primary" href="/productos/crear">Nuevo</b-button>
       </div>
     </div>
-        <b-table responsivestriped hover :fields="fields" :items="productos" id="list_products" :per-page="perPage" :current-page="currentPage" small>
-          <template slot="acciones" slot-scope="row"> <!-- row trae los datos  y en este caso el id -->
-            <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row)" class="mr-2" size="sm">Editar</b-button>
+        <b-table responsivestriped hover :fields="fields"  @row-clicked="asig" :items="productos" id="list_products" :per-page="perPage" :current-page="currentPage"  small>
+              
+          <template slot="acciones" slot-scope="row" > <!-- row trae los datos  y en este caso el id -->
+
+            <b-button v-b-modal.modal-prevent-closing variant="info" @click="asignar(row.item.slug)" class="mr-2" size="sm">Editar</b-button>
             <b-button size="sm" @click="$bvModal.show('hecho');asignarmsg(row.item.id)" class="mr-2" variant="danger" type="button">Eliminar</b-button>
           </template>
         </b-table>
-        <b-modal id="modal-prevent-closing" ref="modal" title="Editar Producto"  @show="resetModal" @hidden="resetModal" @ok="handleOk">
-          <form ref="form" @submit.stop.prevent="handleSubmit">
-             <b-form-group  :state="nombreState" label="Nombre" label-for="name-input" invalid-feedback="Nombre es requerido">
-                <b-form-input :state="nombreState" id="nombre"  required></b-form-input>
-              </b-form-group>
-              <b-form-group  :state="precioState" label="Precio" label-for="precio-input" invalid-feedback="Precio es requerido">
-                <b-form-input :state="precioState" id="precio"   required></b-form-input>
-              </b-form-group>
-              <b-form-group :state="cantidadState" label="Cantidad" label-for="cantidad-input" invalid-feedback="Cantidad es requerida">
-                <b-form-input :state="cantidadState" id="cantidad" required></b-form-input>
-              </b-form-group>
-          </form>
+        <b-modal  ref="modal" title="Editar Producto"  hide-footer @show="resetModal" @hidden="resetModal" @ok="handleOk">
+            <template slot="modal-header"  >
+              <div style="text-align:center">
+                  <h1>Vista detallada</h1>
+              </div>
+            </template>
+            <template slot="default" >
+              <b-row no-gutters v-if="vista!=null">
+                <b-col md="6">
+                    <b-carousel
+                      id="carousel-no-animation"
+                      style="text-shadow: 0px 0px 2px #000"
+                      controls
+                      :interval="4000"
+                      hover-pause
+                    >
+                        <b-carousel-slide>
+                        <img   slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${vista.imagen}`" alt="image slot">
+                        </b-carousel-slide>
+                        <b-carousel-slide>
+                        <img  v-if="vista.hasOwnProperty('imagen2')"  slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${vista.imagen2}`" alt="image slot">
+                        </b-carousel-slide>
+                        <b-carousel-slide>
+                        <img  v-if="vista.hasOwnProperty('imagen3')"  slot="img" class="d-block img-fluid w-100" v-bind="mainProps" :src="`${vista.imagen3}`" alt="image slot">
+                        </b-carousel-slide>
+                        
+
+                    </b-carousel>
+                </b-col>
+                <b-col md="6">
+                  <b-list-group flush>
+                    <b-list-group-item> <h6>Nombre de producto: </h6> {{vista.nombre}} </b-list-group-item>
+                    <b-list-group-item> <h6>Precio: {{vista.precio|currency}}</h6> </b-list-group-item>
+                    <b-list-group-item><h6>Cantidad existente:  {{vista.cantidad}} </h6></b-list-group-item>
+                    <b-list-group-item><h6>Categoria: </h6> {{vista.categoria}} </b-list-group-item>
+                  </b-list-group>
+                </b-col>
+              </b-row>
+           </template>
        </b-modal>
 
        <b-modal id="hecho" 
@@ -90,7 +119,7 @@ export default {
           productos.push({id:value.id,...value.data()});
         });
         return {
-          perPage: 10,
+          perPage: 7,
           currentPage: 1,
           productos
         };
@@ -103,13 +132,13 @@ export default {
   },
   data() {
     return {
-       Validars:true,
+
+      vista:null,
+      
+      Validars:true,
       msg:null,
       elim_id:null,
-      nombreState: null,
-      precioState:null,
-      cantidadState:null,
-      fields: ["Imagen", "nombre", "precio", "cantidad", "acciones"],
+      fields: [ "nombre", "precio", "cantidad", "acciones"],
     };
   },
   methods: {
@@ -175,15 +204,14 @@ export default {
           this.$refs.modal.hide()
         })
       },
-      asignar(row){
-        lec = row.item.id;
-        
-        nombre.value= row.item.nombre,
-        precio.value= row.item.precio,
-        cantidad.value=row.item.cantidad
-        
-        
+      asignar(slug){
+      this.$router.push({
+              path: "/editar/"+slug
+            });
 
+      },asig(item,id){
+         this.$refs.modal.show()
+          this.vista = item;
       }
  
   }
@@ -220,6 +248,7 @@ h1 {
   padding: 15px;
   background: #ebeeef;
 }
+
 .wrap-login100 { /* Contenedor blanco div*/
   width: 100%;  
   width: 990px;

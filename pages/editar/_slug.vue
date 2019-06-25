@@ -2,7 +2,7 @@
   <div class="container-login100">
     <div class="wrap-login100">
       <div class="wrap-login100">
-        <h1 class="text-center">Agregar producto nuevo</h1>
+        <h1 class="text-center">Editar producto</h1>
     <b-form id="product" @submit="guardarProducto" class="login100-form validate-form" >
       
       <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">
@@ -12,7 +12,7 @@
           placeholder=" cargar imagen"
           accept="image/"
           v-model="imageProduct"
-          required
+          
           />
           <label for="nombre">Imagen opcional 2</label>
           <b-form-file
@@ -33,29 +33,29 @@
       </b-form-group>
        <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">
           <label for="nombre">Direccion Video</label>
-          <b-form-input   class="input100" v-model="DirUrl" id="url" type="text" placeholder="Ingrese url de Video"></b-form-input>
+          <b-form-input   class="input100" v-model="producto.DirUrl" id="url" type="text" placeholder="Ingrese url de Video"></b-form-input>
           <span class="focus-input100"></span>
       </b-form-group>
       <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">
           <label for="nombre">Nombre</label>
-          <b-form-input   class="input100" v-model="form.nombre" id="nombre" type="text" required placeholder="Ingrese nombre"></b-form-input>
+          <b-form-input   class="input100" v-model="producto.nombre" id="nombre" type="text" required placeholder="Ingrese nombre"></b-form-input>
           <span class="focus-input100"></span>
       </b-form-group>
       <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">       
         <label for="precio">Precio</label>
-        <b-form-input v-model="form.precio" id="precio" type="number" required placeholder="Ingrese valor en pesos"
+        <b-form-input v-model="producto.precio" id="precio" type="number" required placeholder="Ingrese valor en pesos"
         class="input100"
         ></b-form-input>
         <span class="focus-input100"></span>
       </b-form-group>
       <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">  
         <label for="cantidad">Cantidad</label>
-        <b-form-input  class="input100" v-model="form.cantidad" id="cantidad" type="number" required placeholder="Ingrese cantidad existente"></b-form-input>
+        <b-form-input  class="input100" v-model="producto.cantidad" id="cantidad" type="number" required placeholder="Ingrese cantidad existente"></b-form-input>
         <span class="focus-input100"></span>
      </b-form-group>
       <b-form-group class="wrap-input100 validate-input m-b-26 alert-validate">
         <label label-for="categorias" label="categoria">Categoria</label>
-        <b-form-select  class="input100" id="categorias" v-model="form.categoria" :options="categorias"  required placeholder="Seleccionar"></b-form-select>
+        <b-form-select  class="input100" id="categorias" v-model="producto.categoria" :options="categorias"  required placeholder="Seleccionar"></b-form-select>
         <span class="focus-input100"></span>
       </b-form-group>
 
@@ -103,12 +103,14 @@ export default {
   },
   data(){
     return {
+      id:this.$route.params.slug,
       msg: null,
       guardando:false,
       imageProduct:'',
       imageProduct2:'',
       imageProduct3:'',
       DirUrl:'',
+      producto:[],
       form:{
         nombre: '',
         cantidad:'',
@@ -119,24 +121,66 @@ export default {
         
       }
     }
-  },
+  },created(){
+        this.traerdatos();
+    
+    },
   methods: {
+     traerdatos(){ // TRAER DATOS DE PRODUCTO SEGUN SLUG
+     
+      return db.collection('productos').where('slug','==',this.id).onSnapshot(productSnap=>{
+                this.producto = []
+
+                productSnap.forEach(async valueCarrito =>{
+
+                    this.producto = valueCarrito.data()
+                    this.producto.id= valueCarrito.id
+                })
+            })
+
+     },
     guardarProducto(evt){
       
       evt.preventDefault()
 
       this.guardando = true;
      
-      let imageRef = storage.child(this.imageProduct.name)
+      if(this.imageProduct!='' &&  this.imageProduct!=null){
+          let imageRef = storage.child(this.imageProduct.name)
+      }else{
+        this.form.imagen=this.producto.imagen
+      }
+
+
+      
       let imageRef2, imageRef3=null;
 
       if(this.imageProduct2!='' &&  this.imageProduct2!=null){
         imageRef2 = storage.child(this.imageProduct2.name)
+      }else{
+
+        if(this.form.hasOwnProperty('imagen2')){
+            this.form.imagen2=this.producto.imagen2
+          }
+         
       }
+
       if(this.imageProduct3!='' &&  this.imageProduct3!=null){
         imageRef3 = storage.child(this.imageProduct3.name)
+      }else{
+        
+         if(this.form.hasOwnProperty('imagen3')){
+            this.form.imagen3=this.producto.imagen3
+          }
       }
-      if(url!='') this.form.DirUrl= this.DirUrl
+      if(url!=''){ 
+         this.form.DirUrl= this.DirUrl
+      }else{
+        if(this.form.hasOwnProperty('DirUrl')){
+            this.form.url= this.producto.DirUrl
+          }
+        
+      }
 
 
       if(imageRef2!=null && imageRef3!=null ){
@@ -177,27 +221,24 @@ export default {
          })
         
         }else{
-        imageRef.put(this.imageProduct).then(async imageRes =>{
-        this.form.imagen = await imageRes.ref.getDownloadURL()
+
+        
         this.guardadordispar()
-      })
+      
       }
       
       
     },
+   
     guardadordispar(){
+
+          let form = this.producto;
           this.guardando= false;
 
-          db.collection("productos").add(this.form).then(res=>{
-           
-           this.msg = 'El producto se guardo correctamente!';
-
-           //this.$root.$emit("bv::show::modal", "hecho");
-           this.showMsgBoxTwo()
-           
-         
-            
-          })
+          db.collection("productos").doc(this.producto.id).set(form);
+          this.msg="Producto Actualizado";
+           this.showMsgBoxTwo();
+          
     },
     showMsgBoxTwo() {
         this.boxTwo = ''

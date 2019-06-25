@@ -8,7 +8,7 @@
     img-width="1024"
     img-height="480"
   >
-    <b-carousel-slide
+    <b-carousel-slide 
       img-src="prom-17052019.jpg"
     ></b-carousel-slide>
     <b-carousel-slide
